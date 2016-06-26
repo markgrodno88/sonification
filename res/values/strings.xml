@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+	<string name="discreet_activity">discreet_activity</string>
+    <string name="app_name">Proj</string>
+	<string name="action_OpenGallary">Open Gallary</string>
+	<string name="original">Original</string>
+	<string name="clearFilters">clearFilters</string>
+	<string name="gray_filter">gray_filter</string>
+	<string name="partOfImage">partOfImage</string>
+	<string name="list_low_pass_filter">List low-past filter</string>
+		<string name="low_pass_filter">LPS</string>
+			<string name="average_filter">average_filter</string>
+			<string name="gaussian_filter">gaussian_filter</string>
+			<string name="median_filter">median_filter</string>
+	<string name="list_high_pass_filter">List high-past filter</string>
+		<string name="high_pass_filter">HPS</string>
+			<string name="mean_removal_filter">mean_removal_filter</string>
+			<string name="hp1_filter">hp1_filter</string>
+	<string name="list_band_pass_filter">List band-past filter</string>
+		<string name="band_pass_filter">BPS</string>
+			<string name="sobel_filter">sobel_filter</string>
+			<string name="canny_filter">canny_filter</string>
+			<string name="laplace_filter">laplace_filter</string>	
+	<string name="list_dft">List dft</string>
+		<string name="dft">DFT</string>
+			<string name="magnitude">dft_magnitude</string>
+			<string name="phase">dft_phase</string>
+	<string name="histogram">Histogram</string>
+	
+		
+</resources>
