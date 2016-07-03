@@ -5,94 +5,111 @@ import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import com.sonification.exceptions.ExceptionOfProject;
 import com.sonification.test.ConstantValue;
+import com.sonification.test.OriginalMatSingleton;
+
+import android.util.Log;
 
 
 public class RGB {
-	private final static float FREQUENCY_RED_kHz= 11.0f,
-		       FREQUENCY_GREEN_kHz = 22.0f,
-		       FREQUENCY_BLUE_kHz = 33.0f,
-		       FREQUENCY_NORMALISED_kHz = 44.0f;
-	ImageOperations imeageOperation = new ImageOperations();
+	private final static float FREQUENCY_RED_HZ = 261.6f,
+							   FREQUENCY_GREEN_HZ = 329.6f,
+							   FREQUENCY_BLUE_HZ = 392.0f,
+							   FREQUENCY_BASE_HZ = 440.0f,
+							   FREQUENCY_NORMALISATION = 44100.0f;
 	
-	private List<Float> calculateMeanFromRGB(Mat originalMat) throws ExceptionOfProject {
+	private ImageOperations imageOperations = new ImageOperations();
+
+	public List<Float> calculateFrequncyFromRGBChannels(List<Float> dominantFrequncy, boolean normalisationValue){
+		List<Float> frequnciesFromRGBChannels = new ArrayList<>(3);
+		float coefficient = FREQUENCY_BASE_HZ * FREQUENCY_NORMALISATION;
+		if(normalisationValue == true){
+			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.RED_INDEX)*FREQUENCY_RED_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.GREEN_INDEX)*FREQUENCY_GREEN_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.BLUE_INDEX)*FREQUENCY_BLUE_HZ/coefficient);
+		}else{
+			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.RED_INDEX)*FREQUENCY_RED_HZ/FREQUENCY_BASE_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.GREEN_INDEX)*FREQUENCY_GREEN_HZ/FREQUENCY_BASE_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.BLUE_INDEX)*FREQUENCY_BLUE_HZ/FREQUENCY_BASE_HZ);
+		}
+		return frequnciesFromRGBChannels;
+
+	}
+	public List<Float> calculateMeanFromRGBChannels(Mat originalMat, boolean normalisationValue) throws ExceptionOfProject {
 		Scalar scalar = Core.mean(originalMat);
 		float meanR, meanG, meanB;
-		if(originalMat.channels()== 4){
-			meanR = imeageOperation.roundValue((float)(scalar.val[ConstantValue.RED_INDEX]));
-			meanG = imeageOperation.roundValue((float)(scalar.val[ConstantValue.GREEN_INDEX]));
-			meanB =	imeageOperation.roundValue((float)(scalar.val[ConstantValue.BLUE_INDEX]));										
-		}else if(originalMat.channels()==1){	
+		if(originalMat.channels() == 3){
+			meanR = imageOperations.roundValue((float)(scalar.val[ConstantValue.RED_INDEX]));
+			meanG = imageOperations.roundValue((float)(scalar.val[ConstantValue.GREEN_INDEX]));
+			meanB =	imageOperations.roundValue((float)(scalar.val[ConstantValue.BLUE_INDEX]));	
+		}else if(originalMat.channels() == 1){	
 			throw new ExceptionOfProject("Can't calculate RGB channel's parameter because its grayscale mat.");
 		}else{
 			throw new ExceptionOfProject("Incorrect number of color channels.");
 		}
-		List <Float> listOfChannels = new ArrayList<>();
+		List <Float> listOfChannels = new ArrayList<>(3);
+		if(normalisationValue == true){
+			meanR = meanR/ConstantValue.COUNT_OF_LEVEL;
+			meanG = meanG/ConstantValue.COUNT_OF_LEVEL;
+			meanB = meanB/ConstantValue.COUNT_OF_LEVEL;
+		}	
 		listOfChannels.add(meanR);
 		listOfChannels.add(meanG);
-		listOfChannels.add(meanB);
-		
+		listOfChannels.add(meanB);		
 		return listOfChannels;
 	}
-	public float getMeanFromRedChannel(Mat originalMat, boolean normalisationValue) {	
-		try{
-			if(normalisationValue == true){
-				return calculateMeanFromRGB(originalMat).get(0)/ConstantValue.COUNT_OF_LEVEL;
-			}else{
-				return calculateMeanFromRGB(originalMat).get(0);
-			}
-		}catch(ExceptionOfProject e){
-			e.printStackTrace();
-			return 0;
+	/*
+	public float getMeanFromRedChannel(List<Float> list, boolean normalisationValue) {	
+		if(normalisationValue == true){
+			return list.get(ConstantValue.RED_INDEX)/ConstantValue.COUNT_OF_LEVEL;
+		}else{
+			return list.get(ConstantValue.RED_INDEX);
 		}	
 	}
-	public float getMeanFromGreenChannel(Mat originalMat,boolean normalisationValue){		
-		try{
-			if(normalisationValue == true){
-				return calculateMeanFromRGB(originalMat).get(1)/ConstantValue.COUNT_OF_LEVEL;
-			}else{
-				return calculateMeanFromRGB(originalMat).get(1);
-			}
-		}catch(ExceptionOfProject e){
-			e.printStackTrace();
-			return 0;
-		}	
+	public float getMeanFromGreenChannel(List<Float> list,boolean normalisationValue){		
+		if(normalisationValue == true){
+			Log.d("green", ""+list.get(1)/ConstantValue.COUNT_OF_LEVEL);
+			return list.get(1)/ConstantValue.COUNT_OF_LEVEL;
+		}else{
+			Log.d("green", ""+list.get(1));
+			return list.get(1);
+		}
 	}
-	public float getMeanFromBlueChannel(Mat originalMat,boolean normalisationValue){		
-		try{
-			if(normalisationValue == true){
-				return calculateMeanFromRGB(originalMat).get(2)/ConstantValue.COUNT_OF_LEVEL;
-			}else{
-				return calculateMeanFromRGB(originalMat).get(2);
-			}
-		}catch(ExceptionOfProject e){
-			e.printStackTrace();
-			return 0;
+	public float getMeanFromBlueChannel(List<Float> list,boolean normalisationValue){		
+		if(normalisationValue == true){
+			Log.d("blue", ""+list.get(2)/ConstantValue.COUNT_OF_LEVEL);
+			return list.get(2)/ConstantValue.COUNT_OF_LEVEL;
+		}else{
+			Log.d("blue", ""+list.get(2));
+			return list.get(2);
 		}	
 	} 
 	
 	public float getFrequencyRedChannel(boolean normalisationValue){		
 		if(normalisationValue == true){
-			return FREQUENCY_RED_kHz/FREQUENCY_NORMALISED_kHz;
+			return FREQUENCY_RED_HZ/FREQUENCY_BASE_HZ;
 		}else{
-			return FREQUENCY_RED_kHz;
+			return FREQUENCY_RED_HZ;
 		}
 	} 
 	
 	public float getFrequencyGreenChannel(boolean normalisationValue){		
 		if(normalisationValue == true){
-			return FREQUENCY_GREEN_kHz/FREQUENCY_NORMALISED_kHz;
+			return FREQUENCY_GREEN_HZ/FREQUENCY_BASE_HZ;
 		}else{
-			return FREQUENCY_GREEN_kHz;
+			return FREQUENCY_GREEN_HZ;
 		}
 	}
 	
 	public float getFrequencyBlueChannel(boolean normalisationValue){		
 		if(normalisationValue == true){
-			return FREQUENCY_BLUE_kHz/FREQUENCY_NORMALISED_kHz;
+			return FREQUENCY_BLUE_HZ/FREQUENCY_BASE_HZ;
 		}else{
-			return FREQUENCY_BLUE_kHz;
+			return FREQUENCY_BLUE_HZ;
 		}
 	}
+	*/
 }

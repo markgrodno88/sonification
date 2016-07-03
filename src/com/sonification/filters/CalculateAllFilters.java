@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Mat;
 
-import com.sonification.fft.FFTMagnitude;
-import com.sonification.fft.FFTPhase;
 import com.sonification.parameters.OutputInformations;
 
 public class CalculateAllFilters {

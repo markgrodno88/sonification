@@ -4,10 +4,18 @@ import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import com.sonification.filters.EnumsFilters.FilterName;
+
+
 public class Average implements ImageFilter{
-	Size size;
+	private Size size;
+	private FilterName filterName;
+	
+	public Average() {
+		this.filterName = FilterName.AVERAGE;
+	}
 	@Override
-	public Mat createFiltr(Mat originalImage) {
+	public Mat filterMat(Mat originalImage) {
 		Mat average=new Mat();
 		size=new Size(9,9);
 		Imgproc.blur(originalImage, average, size);
@@ -21,5 +29,9 @@ public class Average implements ImageFilter{
 
 	public double getDimension() {
 		return size.height;
-	}	
+	}
+	@Override
+	public FilterName getFilterName() {
+		return filterName;
+	}
 }

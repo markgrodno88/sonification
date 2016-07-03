@@ -10,8 +10,9 @@ public final class ConstantValue {
 			 				HSV_HUE = 360;
 	public final static int COUNT_OF_LEVEL = 255;
 	public final static int COUNT_ROUND = 100000;
-	public final static int RED_INDEX = 2,
+	public final static int RED_INDEX = 0,
 							GREEN_INDEX = 1,
-							BLUE_INDEX = 0;
-
+							BLUE_INDEX = 2,
+							GRAY_INDEX = 0;
+	public static int FOUR_MAT = 4, NINE_MAT = 9;
 }

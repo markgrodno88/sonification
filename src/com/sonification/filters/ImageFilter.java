@@ -1,12 +1,12 @@
 package com.sonification.filters;
 
-import java.util.List;
-
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
+
+import com.sonification.filters.EnumsFilters.FilterName;
 
 public interface ImageFilter{
-	public Mat createFiltr(Mat originalImage);
+	public Mat filterMat(Mat originalImage);
 	public String getName();
 	public double getDimension();
+	public FilterName getFilterName();
 }

@@ -46,6 +46,7 @@ public class HistogramRGB{
 	public Mat drawHistogramRGB(Mat originalImage, int hist_w, int hist_h){
 		List <Mat> listOfChannels = getListOfChannels(originalImage);  
 		long bin_w = Math.round((double) hist_w / 256);
+		Log.d("Histogram", ""+listOfChannels.size());
 	    Mat histImage = new Mat( hist_h, hist_w, CvType.CV_8UC3, new Scalar( 0,0,0,0) );
 	    Mat hist_r=listOfChannels.get(0);
 	    Mat hist_g=listOfChannels.get(1);
@@ -57,7 +58,7 @@ public class HistogramRGB{
 	    for(int i = 1; i < 256; i++){
 	    	p1 = new Point(bin_w * (i - 1),(hist_h - Math.round(hist_r.get(i - 1, 0)[0])));
 	        p2 = new Point(bin_w * (i), (hist_h - Math.round(hist_r.get(i, 0)[0])));
-	    	Core.line(histImage, p1, p2, new Scalar(0,0,255), 2, 8, 0);
+	    	Core.line(histImage, p1, p2, new Scalar(255,0,0), 2, 8, 0);
 	    		    	
 	    	p3 = new Point(bin_w * (i - 1), (hist_h - Math.round(hist_g.get(i - 1, 0)[0])));
 	        p4 = new Point(bin_w * (i), (hist_h - Math.round(hist_g.get(i, 0)[0])));
@@ -65,7 +66,7 @@ public class HistogramRGB{
 	
 	        p5 = new Point(bin_w * (i - 1), hist_h - Math.round(hist_b.get(i - 1, 0)[0]));
 	        p6 = new Point(bin_w * (i), hist_h - Math.round(hist_b.get(i, 0)[0]));
-	        Core.line(histImage, p5, p6, new Scalar(255, 0, 0), 2, 8, 0);        
+	        Core.line(histImage, p5, p6, new Scalar(0, 0, 255), 2, 8, 0);        
 	    } 
 	    return histImage;
 	}

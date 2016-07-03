@@ -2,10 +2,15 @@ package com.sonification.filters;
 
 import org.opencv.core.Mat;
 
-public class Original implements ImageFilter{
+import com.sonification.filters.EnumsFilters.FilterName;
 
+public class Original implements ImageFilter{
+	private FilterName filterName;
+	public Original() {
+		this.filterName = FilterName.ORIGINAL;
+	}
 	@Override
-	public Mat createFiltr(Mat originalImage) {
+	public Mat filterMat(Mat originalImage) {
 		
 		return originalImage;
 	}
@@ -16,5 +21,9 @@ public class Original implements ImageFilter{
 	public double getDimension() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public FilterName getFilterName() {
+		return filterName;
 	}
 }

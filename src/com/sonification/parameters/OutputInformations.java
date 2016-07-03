@@ -49,7 +49,7 @@ public class OutputInformations {
 		return listOfParameters;
 	}*/
 	public Mat getFilteredMat(Mat originalImage, ImageFilter filter){
-		return filter.createFiltr(originalImage);
+		return filter.filterMat(originalImage);
 	}
 	}
 	/*bezposrednio z histogramu

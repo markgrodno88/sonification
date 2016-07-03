@@ -2,27 +2,22 @@ package com.sonification.test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
+
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.highgui.Highgui;
-import org.opencv.imgproc.Imgproc;
+
 import com.example.proj.R;
 import com.sonification.filters.*;
+import com.sonification.filters.EnumsFilters.FilterName;
 import com.sonification.image_operations.HistogramRGB;
 import com.sonification.image_operations.ImageOperations;
 import com.sonification.parameters.OutputDate;
 import com.sonification.parameters.OutputInformations;
+import com.sonification.test.EnumsTypeOfSonification.Type;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -53,7 +48,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnTouchListener{
-	private String s = "hoh";
 	private static final int SELECT_PICTURE = 1;
 	private static final String  TAG   = "Load_and_manipulation";
 	//iView i textView do wyswietlania wynikow
@@ -74,7 +68,7 @@ public class MainActivity extends Activity implements OnTouchListener{
 	private String selectedImagePath;
 	private HistogramRGB histogramRGB;
 	//obiekt do wygenerowania tej listy
-	private CalculateAllFilters calculateAllFilters = new CalculateAllFilters();
+	//private CalculateAllFilters calculateAllFilters = new CalculateAllFilters();
 	//sama lista
 	List <ImageFilter> listOfFilters;
 	Gaussian g = new Gaussian();
@@ -85,16 +79,17 @@ public class MainActivity extends Activity implements OnTouchListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		iv = (ImageView) findViewById(R.id.originalImage);
+		
 		iv.setOnTouchListener(this);
 		imageView = (ImageView) findViewById(R.id.roiImage);
 		histogramRGB = new HistogramRGB();
-		//histogramRGBview = (ImageView) findViewById(R.id.rgbHistogramImage);
+		histogramRGBview = (ImageView) findViewById(R.id.rgbHistogramImage);
 		//luminosityView = (ImageView) findViewById(R.id.luminosityImage);
 		tv1 = (TextView) findViewById(R.id.textviewFilteringTime);
-		//tv2 = (TextView) findViewById(R.id.textviewRGBTime);
+		tv2 = (TextView) findViewById(R.id.textviewRGBTime);
 		//tv3 = (TextView) findViewById(R.id.textviewLuminosityTime);
 		//uzupełniamy listę filtrów
-		listOfFilters = calculateAllFilters.getListOfFilters();
+		//listOfFilters = calculateAllFilters.getListOfFilters();
 		
         np1 = (NumberPicker) findViewById(R.id.numberPicker1);
         np2 = (NumberPicker) findViewById(R.id.numberPicker2);
@@ -126,10 +121,24 @@ public class MainActivity extends Activity implements OnTouchListener{
 		    	//create path
 		    	selectedImageUri = data.getData();
 		    	selectedImagePath = li.getPath(selectedImageUri);
-		    	bMap = li.loadImage(selectedImagePath);
-				iv.setImageBitmap(bMap);	
+		    	//create original mat
+		    	Mat loadedMat = li.load(selectedImagePath);
 				originalMatSingleton = OriginalMatSingleton.getInstance();
-				originalMatSingleton.setOriginalMat(bMap);
+				//add original mat to singleton
+				originalMatSingleton.setOriginalMat(loadedMat);	
+				//set width and height of view
+				originalMatSingleton.setCurrentlyViewParameters(iv.getWidth(),iv.getHeight());
+		    	//load mat to view
+				bMap = imageOperations.convertToBitmapImage(originalMatSingleton.getOriginalMat());
+				iv.setImageBitmap(bMap);
+				//set type of sonification - currently: RGB, HSV (enums from EnumTypeOfSonification)
+				originalMatSingleton.setTypeOfSonification(Type.RGB); //wybór trybu
+				//set list of dominant frequencies
+				List<Float> list = new ArrayList<>();
+				list.add(32000.0f);
+				list.add(12040.0f);
+				list.add(21100.0f);
+				originalMatSingleton.setListOfDominantFrequences(list);
 		    }
 	    }
 	}  
@@ -154,93 +163,77 @@ public class MainActivity extends Activity implements OnTouchListener{
 		 */
 		}else if(id==R.id.average_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(1).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(0));
+				originalMatSingleton.deleteFilterFromMap(FilterName.AVERAGE);
 				item.setChecked(false);
 			}else{
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(1).getName(),listOfFilters.get(1));
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(1));
+				originalMatSingleton.setCurretlyFilters(new Average());
 				item.setChecked(true);
 			}
 			return true;
 		}else if(id==R.id.median_filter){	
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(2).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(0));
+				originalMatSingleton.deleteFilterFromMap(FilterName.MEDIAN);
 				item.setChecked(false);
 			}else{
-
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(2).getName(),listOfFilters.get(2));
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(2));
+				originalMatSingleton.setCurretlyFilters(new Median());
 				item.setChecked(true);
 			}
 			
 			return true;
 		}else if(id==R.id.gaussian_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(3).getName());
+				originalMatSingleton.deleteFilterFromMap(FilterName.GAUSSIAN);
 				item.setChecked(false);
 			}else{
-				//originalMatSingleton.setCurretlyFilters(listOfFilters.get(3).getName(),listOfFilters.get(3));
 				g.setParametersOfFilter(stdX, stdY);
-				originalMatSingleton.setCurretlyFilters(g.getName(),g);
+				originalMatSingleton.setCurretlyFilters(g);
 				item.setChecked(true);
 			}
 			
 			return true;
 		}else if(id==R.id.mean_removal_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(4).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(0));
+				originalMatSingleton.deleteFilterFromMap(FilterName.MEANREMOVAL);
 				item.setChecked(false);
 			}else{
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(4).getName(),listOfFilters.get(4));
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(4));
+				originalMatSingleton.setCurretlyFilters(new MeanRemoval());
 				item.setChecked(true);
 			}
 			
 			return true;
 		}else if(id==R.id.hp1_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(5).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(0));
+				originalMatSingleton.deleteFilterFromMap(FilterName.HP1);
 				item.setChecked(false);
 			}else{
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(5).getName(),listOfFilters.get(5));
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(5));
+				originalMatSingleton.setCurretlyFilters(new HP1());
 				item.setChecked(true);
 			}
 			return true;
 		}else if(id==R.id.canny_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(6).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(0));
+				originalMatSingleton.deleteFilterFromMap(FilterName.CANNY);
 				item.setChecked(false);
 			}else{
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(6).getName(),listOfFilters.get(6));
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(6));
+				originalMatSingleton.setCurretlyFilters(new Canny());
 				item.setChecked(true);
 			}
 			return true;
 		}else if(id==R.id.laplace_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(7).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(0));
+				originalMatSingleton.deleteFilterFromMap(FilterName.LAPLACIAN);
 				item.setChecked(false);
 			}else{
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(7).getName(),listOfFilters.get(7));
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(7));
+				originalMatSingleton.setCurretlyFilters(new Laplacian());
 				item.setChecked(true);
 			}
 			return true;
 		}else if(id==R.id.sobel_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(8).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(8));
+				originalMatSingleton.deleteFilterFromMap(FilterName.SOBEL);
 				item.setChecked(false);
 			}else{
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(8).getName(),listOfFilters.get(8));
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(8));
+				originalMatSingleton.setCurretlyFilters(new Sobel());
 				item.setChecked(true);
 			}
 			return true;
@@ -252,11 +245,10 @@ public class MainActivity extends Activity implements OnTouchListener{
 			return true;
 		}else if(id==R.id.gray_filter){
 			if(item.isChecked()){
-				originalMatSingleton.deleteFilterFromMap(listOfFilters.get(9).getName());
-				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(0));
+				originalMatSingleton.deleteFilterFromMap(FilterName.GRAY);
 				item.setChecked(false);
 			}else{
-				originalMatSingleton.setCurretlyFilters(listOfFilters.get(9).getName(),listOfFilters.get(9));
+				originalMatSingleton.setCurretlyFilters(new Gray());
 				//originalMatSingleton.setCurretlyFilter(listOfFilters.get(9));
 				item.setChecked(true);
 			}
@@ -308,12 +300,12 @@ public class MainActivity extends Activity implements OnTouchListener{
 	    //znormalizowanie
 	    int matHeight = originalMatSingleton.getHeightOfOriginalMat();
 	    int matWidth = originalMatSingleton.getWidthOfOriginalMat();
-	    
+
 	    float real_y = (y * matHeight) /iv.getHeight() ;
+	    float real_x = (x * matWidth)/ iv.getWidth();
 	    
-	  //  Log.d("!!!***", ""+originalMatSingleton.getCurrentlyFilters().get(listOfFilters.get(3).getName()).getDimension());
 	    
-	    float norm_x = imageOperations.roundValue(x/matWidth);
+	    float norm_x = imageOperations.roundValue(real_x/matWidth);
 	    float norm_y = imageOperations.roundValue(real_y/matHeight);
 	    switch (event.getAction()) {
 	    	//Przykładowo obsłużyłem tylko przeciąganie po ekranie
@@ -322,11 +314,12 @@ public class MainActivity extends Activity implements OnTouchListener{
 	    		//nie zmieniam podwójnego odwoływania się do imageOperations, bo w końcowej aplikacji nie będzie tego fragmentu z wyswietlaniem
 	    		long start=System.currentTimeMillis();
 	  		    long stopFiltering;
-	  		    Mat roiMat = imageOperations.getMultiFilteredMat(imageOperations.getRoiOfOriginalMat(norm_x, norm_y));
-	    		bitMap = imageOperations.convertToBitmapImage(roiMat);
-	    														
+
+	  		   Mat roiMat = imageOperations.getMultiFilteredMat(imageOperations.getRoiOfOriginalMat(norm_x, norm_y, 0));
+	  		   bitMap = imageOperations.convertToBitmapImage(roiMat);								
 	  	    	//ustawienie obrazu wycietego w danym oknie
-	  	    	imageView.setImageBitmap(bitMap);
+	  		   imageView.setImageBitmap(bitMap);
+	  		   Log.d("TYPE", ""+originalMatSingleton.getTypeOfSonification());
 
 	  	    	/*Przykłąd pobrania 12 parametrów: 
 	  	    		0 - wartość średnia: amplituda 0-1, częstotliwość narazie 1
@@ -340,14 +333,14 @@ public class MainActivity extends Activity implements OnTouchListener{
 	  	    	
 	  	    	stopFiltering=System.currentTimeMillis();
 	  	    	//Czas operacji pokazywany w textView
-	  	    	tv1.setText("Filtering:"+(stopFiltering-start)+"ms");
-	  	    	/*
+	  	    	tv1.setText("List :"+(stopFiltering-start)+"ms");
+	  	    /*	
 	  	    	long startRGB=System.currentTimeMillis();
 	    		bitMapHistogram = imageOperations.convertToBitmapImage(histogramRGB.drawHistogramRGB(roiMat, 256, 256));
 	  	    	histogramRGBview.setImageBitmap(bitMapHistogram);
 	    		long stopRGB=System.currentTimeMillis();
 	  	    	tv2.setText("RGB:"+(stopRGB-startRGB)+"+ms");
-	  	    
+	  	    /*
 	  	    	long startLuminosity=System.currentTimeMillis();
 	  	    	bitMapHistogramLuminosity = imageOperations.convertToBitmapImage(histogramRGB.drawHistogramLuminosity(roiMat, 256, 256 ));
 	  	    	luminosityView.setImageBitmap(bitMapHistogramLuminosity);

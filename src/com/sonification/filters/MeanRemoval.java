@@ -2,13 +2,18 @@ package com.sonification.filters;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
+import com.sonification.filters.EnumsFilters.FilterName;
+
 public class MeanRemoval implements ImageFilter{
-	Mat kernel;
+	private Mat kernel;
+	private FilterName filterName;
+	public MeanRemoval() {
+		this.filterName = FilterName.MEANREMOVAL;
+	}
 	@Override
-	public Mat createFiltr(Mat originalImage) {
+	public Mat filterMat(Mat originalImage) {
 		kernel = new Mat(3, 3, CvType.CV_32FC1);
 		//create
 		float[] data =
@@ -35,6 +40,10 @@ public class MeanRemoval implements ImageFilter{
 	@Override
 	public double getDimension() {
 		return kernel.rows();
+	}
+	@Override
+	public FilterName getFilterName() {
+		return filterName;
 	}
 
 }

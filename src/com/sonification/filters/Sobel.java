@@ -6,9 +6,15 @@ import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import com.sonification.filters.EnumsFilters.FilterName;
+
 public class Sobel implements ImageFilter{
+	private FilterName filterName;
+	public Sobel() {
+		this.filterName = FilterName.SOBEL;
+	}
 	@Override
-	public Mat createFiltr(Mat originalImage) {
+	public Mat filterMat(Mat originalImage) {
 		Mat blurredImage=new Mat();
 		Size size=new Size(9,9);
 		Imgproc.GaussianBlur(originalImage, blurredImage, size, 0,0);
@@ -31,5 +37,9 @@ public class Sobel implements ImageFilter{
 	@Override
 	public double getDimension() {
 		return 0;
+	}
+	@Override
+	public FilterName getFilterName() {
+		return filterName;
 	}
  }
