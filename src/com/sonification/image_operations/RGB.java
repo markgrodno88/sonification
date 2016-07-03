@@ -15,25 +15,23 @@ import android.util.Log;
 
 
 public class RGB {
-	private final static float FREQUENCY_RED_HZ = 261.6f,
-							   FREQUENCY_GREEN_HZ = 329.6f,
-							   FREQUENCY_BLUE_HZ = 392.0f,
-							   FREQUENCY_BASE_HZ = 440.0f,
-							   FREQUENCY_NORMALISATION = 44100.0f;
 	
 	private ImageOperations imageOperations = new ImageOperations();
-
-	public List<Float> calculateFrequncyFromRGBChannels(List<Float> dominantFrequncy, boolean normalisationValue){
+	private ConstantValue cVALUE =  new ConstantValue();
+	public List<Float> calculateFrequncyFromRGBChannels(List<Float> dominantFrequncies, boolean normalisationValue){
 		List<Float> frequnciesFromRGBChannels = new ArrayList<>(3);
-		float coefficient = FREQUENCY_BASE_HZ * FREQUENCY_NORMALISATION;
+		float coefficient = ConstantValue.FREQUENCY_A_SOUND_HZ * ConstantValue.FREQUENCY_NORMALISATION_HZ;
 		if(normalisationValue == true){
-			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.RED_INDEX)*FREQUENCY_RED_HZ/coefficient);
-			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.GREEN_INDEX)*FREQUENCY_GREEN_HZ/coefficient);
-			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.BLUE_INDEX)*FREQUENCY_BLUE_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.RED_INDEX) * ConstantValue.FREQUENCY_C_SOUND_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.GREEN_INDEX) * ConstantValue.FREQUENCY_E_SOUND_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.BLUE_INDEX) * ConstantValue.FREQUENCY_G_SOUND_HZ/coefficient);
 		}else{
-			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.RED_INDEX)*FREQUENCY_RED_HZ/FREQUENCY_BASE_HZ);
-			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.GREEN_INDEX)*FREQUENCY_GREEN_HZ/FREQUENCY_BASE_HZ);
-			frequnciesFromRGBChannels.add(dominantFrequncy.get(ConstantValue.BLUE_INDEX)*FREQUENCY_BLUE_HZ/FREQUENCY_BASE_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.RED_INDEX) *
+															   ConstantValue.FREQUENCY_C_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.GREEN_INDEX) *
+															   ConstantValue.FREQUENCY_E_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.BLUE_INDEX) *
+															   ConstantValue.FREQUENCY_G_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
 		}
 		return frequnciesFromRGBChannels;
 

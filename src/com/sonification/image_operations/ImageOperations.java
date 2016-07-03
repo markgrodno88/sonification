@@ -12,7 +12,6 @@ import android.util.Log;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfDouble;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -22,8 +21,8 @@ import com.sonification.filters.EnumsFilters.FilterName;
 import com.sonification.filters.ImageFilter;
 import com.sonification.parameters.Parameter;
 import com.sonification.test.ConstantValue;
-import com.sonification.test.EnumsTypeOfSonification;
-import com.sonification.test.EnumsTypeOfSonification.Type;
+import com.sonification.test.Fragmentation;
+import com.sonification.test.Type;
 import com.sonification.test.OriginalMatSingleton;
 import android.graphics.Bitmap;
 
@@ -140,6 +139,8 @@ public class ImageOperations {
 		}
 		//create list of parameters
 		List<Parameter> listOfParameters = new ArrayList<>(12);
+		//create list of dominant frequencies
+		List<Float> dominantFrequencies = originalMatSingleton.getListOfDominantFrequences();
 		//check type of sonification
 		if(originalMatSingleton.getTypeOfSonification().equals(Type.RGB)){
 			listOfParameters.clear();
@@ -153,7 +154,7 @@ public class ImageOperations {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			listOfRGBFrequencies = rgbChannels.calculateFrequncyFromRGBChannels(originalMatSingleton.getListOfDominantFrequences(), true);
+			listOfRGBFrequencies = rgbChannels.calculateFrequncyFromRGBChannels(dominantFrequencies, true);
 			//Red:
 			Parameter paremeterRedChannel = new Parameter(listOfRGBAmplitudes.get(ConstantValue.RED_INDEX),
 														  listOfRGBFrequencies.get(0));
@@ -208,10 +209,12 @@ public class ImageOperations {
 			listOfParameters.add(parameterMean);
 		}else if(originalMatSingleton.getTypeOfSonification().equals(Type.SPLIT)){
 			SonificationWithFragmentation sWF = new SonificationWithFragmentation();
-			List <Mat> listOfMat = sWF.splitMat(currentMultiMat, ConstantValue.FOUR_MAT);
+			List <Mat> listOfMat = sWF.splitMat(currentMultiMat, Fragmentation.FOUR);
+			List <Float> listOfNormalisedFrewuencies = sWF.calculateFrequenciesOfFragments(dominantFrequencies,  Fragmentation.FOUR);
 			for(int i = 0; i <listOfMat.size(); i++){
+				
 				try {
-					Parameter parameterFragmentation = new Parameter(getMedianValueFromMat(listOfMat.get(i), true), 1);
+					Parameter parameterFragmentation = new Parameter(getMedianValueFromMat(listOfMat.get(i), true), listOfNormalisedFrewuencies.get(i));
 					listOfParameters.add(parameterFragmentation);
 				} catch (ExceptionOfProject e) {
 					// TODO Auto-generated catch block

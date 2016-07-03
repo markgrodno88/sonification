@@ -15,9 +15,8 @@ import com.sonification.filters.*;
 import com.sonification.filters.EnumsFilters.FilterName;
 import com.sonification.image_operations.HistogramRGB;
 import com.sonification.image_operations.ImageOperations;
-import com.sonification.parameters.OutputDate;
-import com.sonification.parameters.OutputInformations;
-import com.sonification.test.EnumsTypeOfSonification.Type;
+
+import com.sonification.test.Type;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -132,12 +131,13 @@ public class MainActivity extends Activity implements OnTouchListener{
 				bMap = imageOperations.convertToBitmapImage(originalMatSingleton.getOriginalMat());
 				iv.setImageBitmap(bMap);
 				//set type of sonification - currently: RGB, HSV (enums from EnumTypeOfSonification)
-				originalMatSingleton.setTypeOfSonification(Type.RGB); //wybór trybu
+				originalMatSingleton.setTypeOfSonification(Type.SPLIT); //wybór trybu
 				//set list of dominant frequencies
 				List<Float> list = new ArrayList<>();
 				list.add(32000.0f);
 				list.add(12040.0f);
 				list.add(21100.0f);
+				list.add(1100.0f);
 				originalMatSingleton.setListOfDominantFrequences(list);
 		    }
 	    }

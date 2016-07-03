@@ -13,7 +13,6 @@ import org.opencv.imgproc.Imgproc;
 import com.sonification.filters.EnumsFilters.FilterName;
 import com.sonification.filters.ImageFilter;
 import com.sonification.image_operations.HSV;
-import com.sonification.test.EnumsTypeOfSonification.Type;
 
 import android.graphics.Color;
 import android.util.Log;
