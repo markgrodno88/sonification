@@ -5,6 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.InstallCallbackInterface;
+import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -14,10 +17,13 @@ import com.sonification.filters.EnumsFilters.FilterName;
 import com.sonification.filters.ImageFilter;
 import com.sonification.image_operations.HSV;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 
-public class OriginalMatSingleton {
+public class OriginalMatSingleton{
+
 	private Mat originalMat, currentlyRGBMat, currentlyHSVMat, currentlyGrayMat;
 	private ImageFilter imageFilter1;
 	private Map <FilterName,ImageFilter> mapOfCurrentFilters;
@@ -25,12 +31,10 @@ public class OriginalMatSingleton {
 	private List<Float> listOfDominantFrequences;
 	private Type typeOfSonification;
 	private HSV hsv;
-	//private int splitValue;
-	static {
-	    if (!OpenCVLoader.initDebug()) {
-	        System.out.println("Cannot load OpenCV");
-	    }
-	}
+	
+	
+
+	
 	private OriginalMatSingleton() {
 		originalMat = new Mat();
 		mapOfCurrentFilters = new LinkedHashMap<>(3);
@@ -43,7 +47,8 @@ public class OriginalMatSingleton {
 	private static class SingletonHolder {
 		private static final OriginalMatSingleton INSTANCE = new OriginalMatSingleton();
 	}
-	public static OriginalMatSingleton getInstance() {			
+	public static OriginalMatSingleton getInstance() {	
+		
 		return SingletonHolder.INSTANCE;
 	}	
 

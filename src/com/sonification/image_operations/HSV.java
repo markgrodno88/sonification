@@ -16,7 +16,7 @@ import android.util.Log;
 
 public class HSV {
 
-	private final static float BASE_FREQUENCY_NORMALISED = 0.3f, C1_NORMALISED = 0.4f, C2_NORMALISED = 0.3f;
+	private final static float BASE_FREQUENCY_NORMALISED = 0.5f, C1_NORMALISED = 0.3f, C2_NORMALISED = 0.2f;
 	private ImageOperations imageOperations = new ImageOperations();
 
 	
@@ -36,21 +36,22 @@ public class HSV {
 			throw new ExceptionOfProject("Incorrect number of color channels.");
 		}
 		List <Float> listMeanOfHSVParameters = new ArrayList<>(3);
-	
-		listMeanOfHSVParameters.add(meanH);
-		listMeanOfHSVParameters.add(meanS);
-		listMeanOfHSVParameters.add(meanV);		
+		int elements = mat.cols()*mat.rows();
+		listMeanOfHSVParameters.add(meanH/elements);
+		listMeanOfHSVParameters.add(meanS/elements);
+		listMeanOfHSVParameters.add(meanV/elements);		
 		return listMeanOfHSVParameters;	
 	}
-
-
-	public float getFrequencyF1(float f2, float meanOfSaturation){
+	private float calculateBaseFrequancy(float meanOfSaturation){
+		return BASE_FREQUENCY_NORMALISED - meanOfSaturation*C2_NORMALISED;
+	}
+	public float calculateFrequencyF1(float f2, float meanOfSaturation){
 		return f2 - meanOfSaturation*C2_NORMALISED;
 	}
-	public float getFrequencyF2(float meanOfHue){
-		return BASE_FREQUENCY_NORMALISED + meanOfHue*C1_NORMALISED;
+	public float calculateFrequencyF2(float meanOfHue, float meanOfSaturation){
+		return calculateBaseFrequancy(meanOfSaturation) + meanOfHue*C1_NORMALISED;
 	}
-	public float getFrequencyF3(float f2, float meanOfSaturation){
+	public float calculateFrequencyF3(float f2, float meanOfSaturation){
 		return f2 + meanOfSaturation*C2_NORMALISED;
 	}
 	

@@ -3,6 +3,9 @@ package com.sonification.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
 import org.opencv.core.MatOfFloat;
@@ -73,10 +76,21 @@ public class MainActivity extends Activity implements OnTouchListener{
 	Gaussian g = new Gaussian();
 	int stdX, stdY;
 	NumberPicker np1, np2;
+	
+	static {
+		if (!OpenCVLoader.initDebug()) {	 
+			Log.d("LoadLibrary", "Internal OpenCV library not found. Using OpenCV Manager for initialization.");
+			  
+		}else{
+			Log.d("LoadLibrary", "OpenCV library found inside package using it.");
+		}
+	}
+
 	 @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		iv = (ImageView) findViewById(R.id.originalImage);
 		
 		iv.setOnTouchListener(this);
@@ -131,7 +145,7 @@ public class MainActivity extends Activity implements OnTouchListener{
 				bMap = imageOperations.convertToBitmapImage(originalMatSingleton.getOriginalMat());
 				iv.setImageBitmap(bMap);
 				//set type of sonification - currently: RGB, HSV (enums from EnumTypeOfSonification)
-				originalMatSingleton.setTypeOfSonification(Type.SPLIT); //wybór trybu
+				originalMatSingleton.setTypeOfSonification(Type.HSV); //wybór trybu
 				//set list of dominant frequencies
 				List<Float> list = new ArrayList<>();
 				list.add(32000.0f);

@@ -185,12 +185,12 @@ public class ImageOperations {
 			float meanOfValueHSV = listMeanValuesFromHSV.get(0);//hsvList.get(ConstantValue.VALUE_INDEX);
 			float meanOfSaturationHSV = listMeanValuesFromHSV.get(1);//hsvList.get(ConstantValue.SATURATION_INDEX);
 			float meanOfHueHSV = listMeanValuesFromHSV.get(2);//hsvList.get(ConstantValue.HUE_INDEX);
-			float f2 = hsv.getFrequencyF2(meanOfHueHSV);
-			float f1 = hsv.getFrequencyF1(f2, meanOfSaturationHSV);
-			float f3 = hsv.getFrequencyF3(f2, meanOfSaturationHSV);
-			Parameter parameterHSV_1 = new Parameter(meanOfValueHSV, 1);
-			Parameter parameterHSV_2 = new Parameter(meanOfValueHSV, 1);
-			Parameter parameterHSV_3 = new Parameter(meanOfValueHSV, 1);
+			float f2 = hsv.calculateFrequencyF2(meanOfHueHSV, meanOfSaturationHSV);
+			float f1 = hsv.calculateFrequencyF1(f2, meanOfSaturationHSV);
+			float f3 = hsv.calculateFrequencyF3(f2, meanOfSaturationHSV);
+			Parameter parameterHSV_1 = new Parameter(meanOfValueHSV, f1);
+			Parameter parameterHSV_2 = new Parameter(meanOfValueHSV, f2);
+			Parameter parameterHSV_3 = new Parameter(meanOfValueHSV, f3);
 			listOfParameters.add(parameterHSV_1);
 			listOfParameters.add(parameterHSV_2);
 			listOfParameters.add(parameterHSV_3);				 
