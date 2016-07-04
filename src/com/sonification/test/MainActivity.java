@@ -144,7 +144,7 @@ public class MainActivity extends Activity implements OnTouchListener{
 				bMap = imageOperations.convertToBitmapImage(originalMatSingleton.getOriginalMat());
 				iv.setImageBitmap(bMap);
 				//set type of sonification - currently: RGB, HSV (enums from EnumTypeOfSonification)
-				originalMatSingleton.setTypeOfSonification(Type.SPLIT); //wybór trybu
+				originalMatSingleton.setTypeOfSonification(Type.HSV); //wybór trybu
 				//set list of dominant frequencies
 				List<Float> list = new ArrayList<>();
 				list.add(32000.0f);

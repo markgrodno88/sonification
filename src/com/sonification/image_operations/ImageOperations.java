@@ -157,14 +157,14 @@ public class ImageOperations {
 			listOfRGBFrequencies = rgbChannels.calculateFrequncyFromRGBChannels(dominantFrequencies, true);
 			//Red:
 			Parameter paremeterRedChannel = new Parameter(listOfRGBAmplitudes.get(ConstantValue.RED_INDEX),
-														  listOfRGBFrequencies.get(0));
+														  listOfRGBFrequencies.get(ConstantValue.RED_INDEX));
 			
 			//Green:
 			Parameter paremeterGreenChannel = new Parameter(listOfRGBAmplitudes.get(ConstantValue.GREEN_INDEX),
-															listOfRGBFrequencies.get(1));
+															listOfRGBFrequencies.get(ConstantValue.GREEN_INDEX));
 			//Blue:
 					Parameter paremeterBlueChannel = new Parameter(listOfRGBAmplitudes.get(ConstantValue.BLUE_INDEX),
-																   listOfRGBFrequencies.get(2));
+																   listOfRGBFrequencies.get(ConstantValue.BLUE_INDEX));
 			
 			listOfParameters.add(paremeterRedChannel);
 			listOfParameters.add(paremeterGreenChannel);
@@ -176,7 +176,7 @@ public class ImageOperations {
 			hsv = new HSV();
 			List<Float> listMeanValuesFromHSV = null;
 			try {
-				listMeanValuesFromHSV = hsv.getListParametersFromHSV(currentMultiMat);
+				listMeanValuesFromHSV = hsv.getListParametersFromHSV(currentMultiMat, true);
 			} catch (ExceptionOfProject e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
