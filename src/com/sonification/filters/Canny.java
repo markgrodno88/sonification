@@ -13,7 +13,12 @@ public class Canny implements ImageFilter{
 	@Override
 	public Mat filterMat(Mat originalImage) {
 		Mat gray = new Mat();
-		Imgproc.cvtColor(originalImage, gray, Imgproc.COLOR_RGB2GRAY);
+		int countOfChannel = originalImage.channels();
+		if(countOfChannel == 3){
+			Imgproc.cvtColor(originalImage, gray, Imgproc.COLOR_RGB2GRAY);
+		}else if(countOfChannel == 1){
+			gray = originalImage;
+		}
 		Mat edgeImage=new Mat();
 		Imgproc.Canny(gray, edgeImage, 100, 200);
 		return edgeImage;

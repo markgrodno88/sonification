@@ -91,8 +91,7 @@ public class MainActivity extends Activity implements OnTouchListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		iv = (ImageView) findViewById(R.id.originalImage);
-		
+		iv = (ImageView) findViewById(R.id.originalImage);		
 		iv.setOnTouchListener(this);
 		imageView = (ImageView) findViewById(R.id.roiImage);
 		histogramRGB = new HistogramRGB();
@@ -145,13 +144,21 @@ public class MainActivity extends Activity implements OnTouchListener{
 				bMap = imageOperations.convertToBitmapImage(originalMatSingleton.getOriginalMat());
 				iv.setImageBitmap(bMap);
 				//set type of sonification - currently: RGB, HSV (enums from EnumTypeOfSonification)
-				originalMatSingleton.setTypeOfSonification(Type.HSV); //wybór trybu
+				originalMatSingleton.setTypeOfSonification(Type.SPLIT); //wybór trybu
 				//set list of dominant frequencies
 				List<Float> list = new ArrayList<>();
 				list.add(32000.0f);
 				list.add(12040.0f);
 				list.add(21100.0f);
 				list.add(1100.0f);
+				list.add(12000.0f);
+				list.add(15040.0f);
+				list.add(2290.0f);
+				list.add(130.0f);
+				list.add(40000.0f);
+				list.add(9100.0f);
+				list.add(36400.0f);
+				list.add(3400.0f);
 				originalMatSingleton.setListOfDominantFrequences(list);
 		    }
 	    }

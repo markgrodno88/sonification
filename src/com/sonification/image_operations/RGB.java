@@ -22,21 +22,21 @@ public class RGB {
 		List<Float> frequnciesFromRGBChannels = new ArrayList<>(3);
 		float coefficient = ConstantValue.FREQUENCY_A_SOUND_HZ * ConstantValue.FREQUENCY_NORMALISATION_HZ;
 		if(normalisationValue == true){
-			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.RED_INDEX) * ConstantValue.FREQUENCY_C_SOUND_HZ/coefficient);
-			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.GREEN_INDEX) * ConstantValue.FREQUENCY_E_SOUND_HZ/coefficient);
-			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.BLUE_INDEX) * ConstantValue.FREQUENCY_G_SOUND_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.C_INDEX) * ConstantValue.FREQUENCY_C_SOUND_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.E_INDEX) * ConstantValue.FREQUENCY_E_SOUND_HZ/coefficient);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.G_INDEX) * ConstantValue.FREQUENCY_G_SOUND_HZ/coefficient);
 		}else{
-			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.RED_INDEX) *
-															   ConstantValue.FREQUENCY_C_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
-			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.GREEN_INDEX) *
-															   ConstantValue.FREQUENCY_E_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
-			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.BLUE_INDEX) *
-															   ConstantValue.FREQUENCY_G_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.C_INDEX) *
+															   	 ConstantValue.FREQUENCY_C_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.E_INDEX) *
+															   	 ConstantValue.FREQUENCY_E_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
+			frequnciesFromRGBChannels.add(dominantFrequncies.get(ConstantValue.G_INDEX) *
+															     ConstantValue.FREQUENCY_G_SOUND_HZ/ConstantValue.FREQUENCY_A_SOUND_HZ);
 		}
 		return frequnciesFromRGBChannels;
 
 	}
-	public List<Float> calculateMeanFromRGBChannels(Mat originalMat, boolean normalisationValue) throws ExceptionOfProject {
+	public List<Float> calculateMeanOfAmlitudeFromRGBChannels(Mat originalMat, boolean normalisationValue) throws ExceptionOfProject {
 		Scalar scalar = Core.mean(originalMat);
 		float meanR, meanG, meanB;
 		if(originalMat.channels() == 3){

@@ -58,16 +58,37 @@ public class SonificationWithFragmentation {
 		List <Float> listOfFragmentFrequencies = null; 
 		if(fragmentation.equals(Fragmentation.FOUR)){
 			listOfFragmentFrequencies = new ArrayList<>(4);
-			listOfFragmentFrequencies.add((dominantFrequncies.get(0) * ConstantValue.FREQUENCY_C_PRIM_SOUND_HZ) / 
+			listOfFragmentFrequencies.add((dominantFrequncies.get(0) * ConstantValue.FREQUENCY_C_BIS_SOUND_HZ) / 
 										  (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
 			listOfFragmentFrequencies.add((dominantFrequncies.get(1) * ConstantValue.FREQUENCY_C_SOUND_HZ) / 
 										  (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
-			listOfFragmentFrequencies.add((dominantFrequncies.get(2) * ConstantValue.FREQUENCY_G_PRIM_SOUND_HZ) / 
+			
+			listOfFragmentFrequencies.add((dominantFrequncies.get(2) * ConstantValue.FREQUENCY_G_BIS_SOUND_HZ) / 
 					  					  (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
 			listOfFragmentFrequencies.add((dominantFrequncies.get(3) * ConstantValue.FREQUENCY_G_SOUND_HZ) / 
 					  					  (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
 		}else if(fragmentation.equals(Fragmentation.NINE)){
 			listOfFragmentFrequencies = new ArrayList<>(9);
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.C_BIS_INDEX) * ConstantValue.FREQUENCY_C_BIS_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.C_PRIM_INDEX) * ConstantValue.FREQUENCY_C_PRIM_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.C_INDEX) * ConstantValue.FREQUENCY_C_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.E_BIS_INDEX) * ConstantValue.FREQUENCY_E_BIS_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.E_PRIM_INDEX) * ConstantValue.FREQUENCY_E_PRIM_SOUND_HZ) / 
+																 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.E_INDEX) * ConstantValue.FREQUENCY_E_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.G_BIS_INDEX) * ConstantValue.FREQUENCY_G_BIS_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.G_PRIM_INDEX) * ConstantValue.FREQUENCY_G_PRIM_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
+			listOfFragmentFrequencies.add((dominantFrequncies.get(ConstantValue.G_INDEX) * ConstantValue.FREQUENCY_G_SOUND_HZ) / 
+					  											 (ConstantValue.FREQUENCY_NORMALISATION_HZ * ConstantValue.FREQUENCY_A_SOUND_HZ));
 		}		 
 		return  listOfFragmentFrequencies;
 	}

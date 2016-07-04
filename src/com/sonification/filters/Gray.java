@@ -13,7 +13,12 @@ public class Gray implements ImageFilter{
 	@Override
 	public Mat filterMat(Mat originalImage) {
 		Mat destination = new Mat();
-		Imgproc.cvtColor(originalImage, destination, Imgproc.COLOR_RGB2GRAY);
+		int countOfChannel = originalImage.channels();
+		if(countOfChannel == 3){
+			Imgproc.cvtColor(originalImage, destination, Imgproc.COLOR_RGB2GRAY);
+		}else if(countOfChannel == 1){
+			destination = originalImage;
+		}
 		return destination;
 	}
 	public String getName() {

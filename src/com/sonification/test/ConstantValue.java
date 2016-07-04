@@ -14,6 +14,7 @@ public final class ConstantValue {
 							GREEN_INDEX = 1,
 							BLUE_INDEX = 2,
 							GRAY_INDEX = 0;
+	
 	public final static float FREQUENCY_A_SOUND_HZ = 440.0f,
 							  FREQUENCY_NORMALISATION_HZ = 44100.0f,
 							  
@@ -28,4 +29,17 @@ public final class ConstantValue {
 			   				  FREQUENCY_C_BIS_SOUND_HZ = 1046.5f,
 							  FREQUENCY_E_BIS_SOUND_HZ = 1318.5f,
 							  FREQUENCY_G_BIS_SOUND_HZ = 1568.0f;
+	
+	public final static int C_BIS_INDEX = 0,
+							C_PRIM_INDEX = 1,
+							C_INDEX = 2,
+							E_BIS_INDEX = 3,
+							E_PRIM_INDEX = 4,
+							E_INDEX = 5,
+							G_BIS_INDEX = 6,
+							G_PRIM_INDEX = 7,
+							G_INDEX = 8;
+							
+							
+						
 }

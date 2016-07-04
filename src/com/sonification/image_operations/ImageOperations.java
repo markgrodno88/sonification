@@ -149,7 +149,7 @@ public class ImageOperations {
 			List<Float> listOfRGBAmplitudes = null;
 			List<Float> listOfRGBFrequencies = null;
 			try {
-				listOfRGBAmplitudes = rgbChannels.calculateMeanFromRGBChannels(currentMultiMat,true);
+				listOfRGBAmplitudes = rgbChannels.calculateMeanOfAmlitudeFromRGBChannels(currentMultiMat,true);
 			} catch (ExceptionOfProject e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -209,8 +209,8 @@ public class ImageOperations {
 			listOfParameters.add(parameterMean);
 		}else if(originalMatSingleton.getTypeOfSonification().equals(Type.SPLIT)){
 			SonificationWithFragmentation sWF = new SonificationWithFragmentation();
-			List <Mat> listOfMat = sWF.splitMat(currentMultiMat, Fragmentation.FOUR);
-			List <Float> listOfNormalisedFrewuencies = sWF.calculateFrequenciesOfFragments(dominantFrequencies,  Fragmentation.FOUR);
+			List <Mat> listOfMat = sWF.splitMat(currentMultiMat, Fragmentation.NINE);
+			List <Float> listOfNormalisedFrewuencies = sWF.calculateFrequenciesOfFragments(dominantFrequencies,  Fragmentation.NINE);
 			for(int i = 0; i <listOfMat.size(); i++){
 				
 				try {
